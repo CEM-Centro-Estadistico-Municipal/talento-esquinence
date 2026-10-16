@@ -119,6 +119,14 @@ body { font-family: var(--font-body); background: var(--brand-tint); color: var(
 .check-row input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--brand); margin-top: 2px; flex-shrink: 0; cursor: pointer; }
 .check-row span { font-size: 14px; color: var(--ink-800); line-height: 1.5; }
 
+/* MENORES */
+.bloque-menor { display: none; background: var(--accent-tint); border: 1.5px solid var(--accent); border-radius: var(--radius-md); padding: 18px 20px; margin: 4px 0 18px; }
+.bloque-menor .menor-titulo { font-family: var(--font-heading); font-weight: 900; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-strong); margin-bottom: 8px; }
+.bloque-menor .menor-texto { font-size: 13px; color: var(--ink-700); line-height: 1.55; margin-bottom: 14px; }
+.bloque-menor .campo label { color: var(--ink-700); }
+.bloque-menor .campo input, .bloque-menor .campo select { border-color: var(--accent-soft); }
+.hint { font-size: 11.5px; color: var(--ink-500); margin-top: 4px; line-height: 1.4; }
+
 /* BOTÓN */
 .btn-enviar { width: 100%; background: var(--brand); color: var(--white); border: none; border-radius: var(--radius-pill); padding: 15px; font-family: var(--font-heading); font-weight: 900; font-size: 16px; letter-spacing: 0.04em; text-transform: uppercase; cursor: pointer; transition: background 0.15s, box-shadow 0.15s, transform 0.1s; box-shadow: var(--shadow-brand); margin-top: 8px; }
 .btn-enviar:hover { background: var(--brand-strong); box-shadow: 0 6px 20px rgba(31,163,236,.35); }
@@ -180,13 +188,23 @@ body { font-family: var(--font-body); background: var(--brand-tint); color: var(
         <div class="seccion-titulo">Datos personales</div>
         <div class="fila-2">
           <div class="campo"><label>Nombre y apellido <span class="req">*</span></label><input type="text" id="nombre" placeholder="Tu nombre completo"></div>
-          <div class="campo"><label>DNI</label><input type="number" id="dni" placeholder="Número de DNI"></div>
+          <div class="campo" id="c-dni"><label>DNI</label><input type="number" id="dni" placeholder="Número de DNI"></div>
         </div>
         <div class="fila-2">
-          <div class="campo"><label>Edad <span class="req">*</span></label><input type="number" id="edad" placeholder="Ej: 28" min="5" max="99"></div>
-          <div class="campo"><label>Teléfono / WhatsApp <span class="req">*</span></label><input type="tel" id="telefono" placeholder="Ej: 3777 123456"></div>
+          <div class="campo"><label>Edad <span class="req">*</span></label><input type="number" id="edad" placeholder="Ej: 28" min="5" max="99" oninput="actualizarMenor()" onchange="actualizarMenor()"><div class="hint">Si tenés menos de 18, te vamos a pedir los datos de un adulto responsable.</div></div>
+          <div class="campo" id="c-telefono"><label>Teléfono / WhatsApp <span class="req">*</span></label><input type="tel" id="telefono" placeholder="Ej: 3777 123456"></div>
         </div>
-        <div class="campo"><label>Correo electrónico</label><input type="email" id="email" placeholder="tucorreo@ejemplo.com"></div>
+        <div class="bloque-menor" id="bloque-menor">
+          <div class="menor-titulo">Inscripción de menores de 18</div>
+          <p class="menor-texto">Para anotar a una persona menor de 18 necesitamos los datos y la autorización de su madre, padre o tutor/a. Un adulto responsable tiene que completar esta parte. A la persona menor no le pedimos DNI, correo, teléfono ni redes: el contacto se hace siempre a través del adulto.</p>
+          <div class="fila-2">
+            <div class="campo"><label>Nombre y apellido del adulto responsable <span class="req">*</span></label><input type="text" id="tutor-nombre" placeholder="Madre, padre o tutor/a"></div>
+            <div class="campo"><label>Vínculo <span class="req">*</span></label><select id="tutor-parentesco"><option value="">Seleccioná...</option><option>Madre</option><option>Padre</option><option>Tutor/a legal</option><option>Otro adulto responsable</option></select></div>
+          </div>
+          <div class="campo"><label>Teléfono / WhatsApp del adulto <span class="req">*</span></label><input type="tel" id="tutor-telefono" placeholder="Ej: 3777 123456"></div>
+          <label class="check-row" style="margin-bottom:0;"><input type="checkbox" id="tutor-autoriza"><span>Soy madre, padre o tutor/a de la persona que se inscribe y autorizo su inscripción en el Registro y el uso de sus datos para el fin indicado más abajo. <span class="req" style="color:var(--red-500)">*</span></span></label>
+        </div>
+        <div class="campo" id="c-email"><label>Correo electrónico</label><input type="email" id="email" placeholder="tucorreo@ejemplo.com"></div>
         <div class="campo"><label>Barrio o localidad</label><input type="text" id="barrio" placeholder="Barrio, zona o localidad cercana"></div>
       </div>
 
@@ -347,14 +365,14 @@ body { font-family: var(--font-body); background: var(--brand-tint); color: var(
           <label style="margin-bottom:10px;">¿Estás disponible para…? <small style="font-weight:600;color:var(--ink-400);text-transform:none;letter-spacing:0"> — marcá lo que aplique</small></label>
           <label class="check-row"><input type="checkbox" id="disp-festival"><span>Participar en festivales, eventos y ferias municipales</span></label>
           <label class="check-row"><input type="checkbox" id="disp-taller"><span>Dar talleres o clases comunitarias</span></label>
-          <label class="check-row"><input type="checkbox" id="disp-video"><span>Grabar un video testimonial para campañas de comunicación</span></label>
+          <label class="check-row" id="c-disp-video"><input type="checkbox" id="disp-video"><span>Grabar un video testimonial para campañas de comunicación <small style="color:var(--ink-500)">(te pediremos una autorización por escrito aparte)</small></span></label>
           <label class="check-row"><input type="checkbox" id="disp-escuelas"><span>Visitar escuelas o centros comunitarios</span></label>
         </div>
-        <div class="fila-2">
+        <div class="fila-2" id="fila-redes">
           <div class="campo"><label>Instagram</label><input type="text" id="instagram" placeholder="@tuusuario"></div>
           <div class="campo"><label>Facebook / TikTok / Otra red</label><input type="text" id="redes-otras" placeholder="Usuario o enlace"></div>
         </div>
-        <div class="campo"><label>Material propio (videos, fotos)</label><input type="text" id="material" placeholder="Link a YouTube, Drive, o describí qué tenés"></div>
+        <div class="campo" id="c-material"><label>Material propio (videos, fotos)</label><input type="text" id="material" placeholder="Link a YouTube, Drive, o describí qué tenés"></div>
       </div>
 
       <!-- COMENTARIOS -->
@@ -458,11 +476,11 @@ body { font-family: var(--font-body); background: var(--brand-tint); color: var(
 
             <label class="check-row" style="margin-bottom:20px;">
         <input type="checkbox" id="acepta-datos">
-        <span>Acepto que la Municipalidad de Esquina guarde y use mis datos para invitarme a actividades culturales y campañas de difusión del talento local.</span>
+        <span>Acepto que la Municipalidad de Esquina guarde y use estos datos <strong>solo</strong> para conocer las capacidades culturales de la ciudad (qué artistas y qué estudiantes hay en cada disciplina) y la demanda de talleres, eventos y cursos. No se usan para ningún otro fin. Participar no tiene costo. Si se trata de una persona menor de 18, lo acepta su madre, padre o tutor/a.</span>
       </label>
 
       <button class="btn-enviar" onclick="enviarFormulario()">Enviar inscripción</button>
-      <p class="aviso">Tus datos son confidenciales y solo serán utilizados por la Secretaría de Turismo y Cultura del Municipio de Esquina.</p>
+      <p class="aviso">Tus datos son confidenciales y solo serán utilizados por la Secretaría de Turismo y Cultura del Municipio de Esquina. No publicamos nombres, fotos ni videos sin una autorización aparte (firmada por madre, padre o tutor/a en el caso de menores). Podés pedir que borremos tus datos cuando quieras, en San Martín 644 o al 3777 560490.</p>
 
       <!-- LLAMADA SECRETARÍA -->
       <div class="llamada-secretaria">
@@ -630,6 +648,16 @@ body { font-family: var(--font-body); background: var(--brand-tint); color: var(
     return vals;
   }
 
+  function actualizarMenor() {
+    var v = parseInt(document.getElementById('edad').value, 10);
+    var menor = !isNaN(v) && v < 18;
+    document.getElementById('bloque-menor').style.display = menor ? 'block' : 'none';
+    ['c-dni', 'c-telefono', 'c-email', 'fila-redes', 'c-material', 'c-disp-video'].forEach(function(id) {
+      var el = document.getElementById(id); if (el) el.style.display = menor ? 'none' : '';
+    });
+    if (menor) { document.getElementById('disp-video').checked = false; }
+  }
+
   function enviarFormulario() {
     var nombre = document.getElementById('nombre').value.trim();
     var edad = document.getElementById('edad').value.trim();
@@ -637,7 +665,19 @@ body { font-family: var(--font-body); background: var(--brand-tint); color: var(
     var acepta = document.getElementById('acepta-datos').checked;
     if (!nombre) { alert('Por favor ingresá tu nombre.'); return; }
     if (!edad) { alert('Por favor ingresá tu edad.'); return; }
-    if (!telefono) { alert('Por favor ingresá un teléfono de contacto.'); return; }
+    var edadNum = parseInt(edad, 10);
+    if (isNaN(edadNum) || edadNum < 5 || edadNum > 99) { alert('Por favor ingresá una edad válida.'); return; }
+    var esMenor = edadNum < 18;
+    var tutorNombre = document.getElementById('tutor-nombre').value.trim();
+    var tutorTelefono = document.getElementById('tutor-telefono').value.trim();
+    var tutorParentesco = document.getElementById('tutor-parentesco').value;
+    var tutorAutoriza = document.getElementById('tutor-autoriza').checked;
+    if (esMenor) {
+      if (!tutorNombre) { alert('Para menores de 18 necesitamos el nombre de la madre, padre o tutor/a.'); return; }
+      if (!tutorParentesco) { alert('Indicá el vínculo del adulto responsable.'); return; }
+      if (!tutorTelefono) { alert('Para menores de 18 necesitamos un teléfono del adulto responsable.'); return; }
+      if (!tutorAutoriza) { alert('El adulto responsable tiene que marcar la autorización para inscribir a una persona menor de 18.'); return; }
+    } else if (!telefono) { alert('Por favor ingresá un teléfono de contacto.'); return; }
     if (disciplinas.length === 0) { alert('Por favor selección al menos una disciplina artística.'); return; }
     var nivelFaltante = disciplinas.some(function(d){ return !niveles[d]; });
     if (nivelFaltante) { alert('Por favor indicá tu nivel de trayectoria para cada disciplina seleccionada.'); return; }
@@ -647,8 +687,8 @@ body { font-family: var(--font-body); background: var(--brand-tint); color: var(
     document.querySelectorAll('#seccion-danza .check-pill.activo').forEach(function(el){ instPils.push(el.textContent.trim()); });
 
     var datos = {
-      nombre: nombre, dni: document.getElementById('dni').value.trim(), edad: edad, telefono: telefono,
-      email: document.getElementById('email').value.trim(), barrio: document.getElementById('barrio').value.trim(),
+      nombre: nombre, dni: esMenor ? '' : document.getElementById('dni').value.trim(), edad: edad, telefono: esMenor ? tutorTelefono : telefono,
+      email: esMenor ? '' : document.getElementById('email').value.trim(), barrio: document.getElementById('barrio').value.trim(),
       disciplinas: disciplinas, otraCual: document.getElementById('otra-cual').value.trim(),
       instrumentos: getPillValues('grid-instrumentos'),
       otroInstrumento: document.getElementById('otro-instrumentos-cual').value.trim(),
@@ -684,11 +724,11 @@ body { font-family: var(--font-body); background: var(--brand-tint); color: var(
       }),
       dispFestival: document.getElementById('disp-festival').checked,
       dispTaller: document.getElementById('disp-taller').checked,
-      dispVideo: document.getElementById('disp-video').checked,
+      dispVideo: esMenor ? false : document.getElementById('disp-video').checked,
       dispEscuelas: document.getElementById('disp-escuelas').checked,
-      instagram: document.getElementById('instagram').value.trim(),
-      redesOtras: document.getElementById('redes-otras').value.trim(),
-      material: document.getElementById('material').value.trim(),
+      instagram: esMenor ? '' : document.getElementById('instagram').value.trim(),
+      redesOtras: esMenor ? '' : document.getElementById('redes-otras').value.trim(),
+      material: esMenor ? '' : document.getElementById('material').value.trim(),
       comentarios: document.getElementById('comentarios').value.trim(),
       espacioDisponible: espacioVal || '',
       espacioTipos: (function(){
@@ -708,7 +748,13 @@ body { font-family: var(--font-body); background: var(--brand-tint); color: var(
       espacioDisponibilidadMunicipio: document.getElementById('espacio-disponibilidad') ? document.getElementById('espacio-disponibilidad').value : '',
       espacioHorarios: document.getElementById('espacio-horarios') ? document.getElementById('espacio-horarios').value.trim() : '',
       espacioComentarios: document.getElementById('espacio-comentarios') ? document.getElementById('espacio-comentarios').value.trim() : '',
-      origen: (new URLSearchParams(location.search).get('src') || 'directo')
+      origen: (new URLSearchParams(location.search).get('src') || 'directo'),
+      esMenor: esMenor,
+      tutorNombre: esMenor ? tutorNombre : '',
+      tutorParentesco: esMenor ? tutorParentesco : '',
+      tutorTelefono: esMenor ? tutorTelefono : '',
+      tutorAutoriza: esMenor ? tutorAutoriza : false,
+      consentimientoFecha: new Date().toISOString()
     };
     var btn = document.querySelector('.btn-enviar'); btn.textContent = 'Enviando...'; btn.disabled = true;
     fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(datos) })
